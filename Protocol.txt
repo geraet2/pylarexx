@@ -26,7 +26,7 @@ type 00		Report sensor data
 		9-byte tuples:
 			u8	tuple length (0x09)
 			u16le	sensor ID
-			u16be!	raw value
+			s16be!	raw value
 			u32le	timestamp
 
 		10-byte tuples contain one extra byte:

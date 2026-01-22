@@ -273,7 +273,7 @@ class TLX00(object):
                 # logging.debug("Parser found start mark")
                 sensorid = int.from_bytes([data[pos+1],data[pos+2]], byteorder = 'little', signed=False)
 
-                rawvalue = int.from_bytes([data[pos+3],data[pos+4]], byteorder = 'big', signed=False)
+                rawvalue = int.from_bytes([data[pos+3],data[pos+4]], byteorder = 'big', signed=True)
                 timestamp = int.from_bytes([data[pos+5],data[pos+6],data[pos+7],data[pos+8]], byteorder = 'little', signed=False)
                 signal=None
                 if data[pos] == 10:
