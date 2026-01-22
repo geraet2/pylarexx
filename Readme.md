@@ -102,6 +102,9 @@ At *config* there are some other configuration options:
 
 ![alt text](https://raw.githubusercontent.com/inonoob/pylarexx/master/Screenshot%20from%202020-01-28%2020-29-39.png)
 
+### Example with munin
+![alt text](https://raw.githubusercontent.com/geraet2/pylarexx/master/Screenshot_20260122_100353_munin.png)
+
 ## Known integrations
 
 [check_mk - old](https://github.com/redflo/check_mk-arexx/)
