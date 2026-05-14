@@ -2,9 +2,14 @@
 
 echo "Installing pylarexx in /usr/local/pylarexx"
 mkdir -p /usr/local/pylarexx
+python3 -m venv /usr/local/pylarexx
+source /usr/local/pylarexx/bin/activate
+pip3 install -r requirements.txt
 cp -r pylarexx.py deviceinfo.xml datalogger /usr/local/pylarexx
-echo "Placing example config to /etc/pylarexx.yml"
-cp example_pylarexx.yml /etc/pylarexx.yml
+if [ ! -f /etc/pylarexx.yml ] ; then
+  echo "Placing example config to /etc/pylarexx.yml"
+  cp example_pylarexx.yml /etc/pylarexx.yml
+fi
 if [ -f /usr/bin/systemctl ] ; then
   echo "Add user pylarexx to run daemon"
   mkdir /var/run/pylarexx/

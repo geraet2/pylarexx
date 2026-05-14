@@ -4,7 +4,7 @@ Description=Python Logger Arexx Daemon
 [Service]
 Type=simple
 RuntimeDirectory=pylarexx
-ExecStart=/usr/local/pylarexx/pylarexx.py -f /etc/pylarexx.yml
+ExecStart=/usr/local/pylarexx/bin/python3 /usr/local/pylarexx/pylarexx.py -f /etc/pylarexx.yml
 WorkingDirectory=/usr/local/pylarexx
 User=pylarexx
 Group=pylarexx
