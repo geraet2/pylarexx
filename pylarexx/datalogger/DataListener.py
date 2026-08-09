@@ -19,13 +19,13 @@ import threading
 try:
     import paho.mqtt.client as mqtt
 except ModuleNotFoundError:
-    logging.warn('No mqtt support')
+    logging.warning('No mqtt support')
 import json
 import sqlite3
 try:
     from influxdb import InfluxDBClient
 except ModuleNotFoundError:
-    logging.warn('No influxdb support')
+    logging.warning('No influxdb support')
 from datetime import datetime
 
 class DataListener(object):
@@ -200,7 +200,8 @@ class RecentValuesListener(DataListener):
             self.openListeningPort()
             
     def __del__(self):
-        self.server.server_close()
+        if isinstance(self.server, socketserver.TCPServer):
+          self.server.server_close()
 
 
 class MQTTListener(DataListener):

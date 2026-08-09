@@ -15,15 +15,16 @@ pylarexx -- Reads data from a Arexx TL-300 or TL-500 Datalogger
 
 import sys
 import os
-import datalogger.Logger
+from .datalogger import Logger
 from argparse import ArgumentParser
 from argparse import RawDescriptionHelpFormatter
 import logging
+import importlib.metadata
 
 __all__ = []
-__version__ = 0.4
+__version__ = 0.5
 __date__ = '2017-11-22'
-__updated__ = '2020-03-14'
+__updated__ = '2026-08-09'
 
 DEBUG = 0
 TESTRUN = 0
@@ -51,13 +52,13 @@ def main(argv=None): # IGNORE:C0111
     program_version = "v%s" % __version__
     program_build_date = str(__updated__)
     program_version_message = '%%(prog)s %s (%s)' % (program_version, program_build_date)
-    program_shortdesc = __import__('__main__').__doc__.split("\n")[1]
+    program_shortdesc = __import__('__main__').__doc__ # .split("\n")[1]
     program_license = '''%s
 
   Created by Florian Gleixner on %s.
   Copyright 2017. All rights reserved.
 
-  pylarexx is licensed under the Apache License, version 2, see License.txt
+  pylarexx is licensed under the Apache License, version 2, see LICENSE
 
   Distributed on an "AS IS" basis without warranties
   or conditions of any kind, either express or implied.
@@ -102,7 +103,7 @@ USAGE
     params={}
     if conffile != None:
         params['conffile']=conffile
-    myDataLogger = datalogger.Logger.TLX00(params)
+    myDataLogger = Logger.TLX00(params)
     myDataLogger.findDevices()
     myDataLogger.initializeDevices()
     myDataLogger.loop()

@@ -11,6 +11,7 @@ import xml.etree.ElementTree
 import sys
 import os
 from pprint import pformat
+from pathlib import Path
 
 class Sensor(object):
     '''
@@ -78,7 +79,7 @@ class ArexxSensorDetector:
         logging.info("Reading deviceinfo.xml")
         try:
 
-            devxml = xml.etree.ElementTree.parse('deviceinfo.xml').getroot()
+            devxml = xml.etree.ElementTree.parse(Path(__file__).parent / 'deviceinfo.xml').getroot()
 
             # devicetypes = devxml.find('devicetypes')
             for dt in devxml.findall('devicetype'):

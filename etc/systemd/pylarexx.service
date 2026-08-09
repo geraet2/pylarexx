@@ -1,10 +1,11 @@
 [Unit]
 Description=Python Logger Arexx Daemon
+After=network.target nss-lookup.target time-sync.target
 
 [Service]
 Type=simple
 RuntimeDirectory=pylarexx
-ExecStart=/usr/local/pylarexx/bin/python3 /usr/local/pylarexx/pylarexx.py -f /etc/pylarexx.yml
+ExecStart=/usr/local/pylarexx/bin/python3 /usr/local/bin/pylarexx/bin/pylarexx -f /etc/pylarexx.yml
 WorkingDirectory=/usr/local/pylarexx
 User=pylarexx
 Group=pylarexx

@@ -4,8 +4,7 @@ echo "Installing pylarexx in /usr/local/pylarexx"
 mkdir -p /usr/local/pylarexx
 python3 -m venv /usr/local/pylarexx
 source /usr/local/pylarexx/bin/activate
-pip3 install -r requirements.txt
-cp -r pylarexx.py deviceinfo.xml datalogger /usr/local/pylarexx
+pip3 install .
 if [ ! -f /etc/pylarexx.yml ] ; then
   echo "Placing example config to /etc/pylarexx.yml"
   cp example_pylarexx.yml /etc/pylarexx.yml

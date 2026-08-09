@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools >= 77.0.3", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["pylarexx", "pylarexx.datalogger"]
+
+[project]
+name = "pylarexx"
+version = "0.5.0"
+authors = [
+  { name="Florian Gleixner", email="flo@redflo.de"},
+  { name="inonoob"},
+  { name="Andreas Thienemann"},
+  { name="geraet2"}
+]
+maintainers = [
+  { name="Florian Gleixner", email="flo@redflo.de"}
+]
+description = "Python Data Logger for Arexx Multilogger Devices"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: POSIX :: Linux",
+]
+license = "Apache-2.0"
+license-files = ["LICEN[CS]E*"]
+dependencies = [
+  "pyusb",
+  "paho-mqtt",
+  "influxdb",
+  "pyaml"
+]
+
+[project.optional-dependencies]
+dev = [
+    "twine",
+    "build"
+]
+
+[project.urls]
+Homepage = "https://github.com/redflo/pylarexx"
+Issues = "https://github.com/redflo/pylarexx/issues"
+
+[project.scripts]
+pylarexx = "pylarexx.__main__:main"
