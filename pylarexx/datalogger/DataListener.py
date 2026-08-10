@@ -261,11 +261,11 @@ class MQTTListener(DataListener):
             newSensor = True
         if self.ready:
             try:
+                uniqueid = '%s_%s' % (self.params.get('mqtt_device', 'pylarexx'), sensor.displayid)
                 topicroot = '%s/%s' % (self.params.get('mqtt_base_topic', 'homeassistant'), 'sensor')
-                topicconfig = '%s/%s_%s/config' % (
-                topicroot, self.params.get('mqtt_device', 'pylarexx'), sensor.displayid)
-                topicstate = '%s/%s_%s/state' % (
-                topicroot, self.params.get('mqtt_device', 'pylarexx'), sensor.displayid)
+                topicconfig = '%s/%s/config' % (topicroot, uniqueid)
+                topicstate = '%s/%s/state' % (topicroot, uniqueid)
+                
 
                 if newSensor:
                     logging.debug('New Sensor config')
@@ -276,18 +276,16 @@ class MQTTListener(DataListener):
                     stype=sensor.type.lower()
                     if stype == "relative humidity":
                         stype="humidity"
-                        
-                    uniqueId='pylarexx-%s-%s' % (stype,sensor.displayid)
-                    logging.debug('Unique Id: %s', uniqueId)
                     
                     payload = {'name': '%s %s' % (sensor.name, sensor.type),
-                               'unique_id': uniqueId,
+                               'unique_id': uniqueid,
                                'device_class': stype,
                                'state_topic': topicstate,
                                'unit_of_measurement': unit_of_measurement,
                                'value_template': '{{value_json.%s}}' % stype,
                                }
-                    self.mqttClient.publish(topicconfig, json.dumps(payload), 0, True)
+                    logging.debug('config payload: %s' % json.dumps(payload))
+                    self.mqttClient.publish(topicconfig, json.dumps(payload), 0, False)
                 statePayload = {}
                 statePayload[sensor.type.lower()] = '%.2f' % sensor.rawToCooked(data['rawvalue'])
                 self.mqttClient.publish(topicstate, json.dumps(statePayload))
