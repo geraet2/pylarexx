@@ -278,8 +278,8 @@ class MQTTListener(DataListener):
                         stype="humidity"
                         
                     uniqueId='pylarexx-%s-%s' % (stype,sensor.displayid)
+                    logging.debug('Unique Id: %s', uniqueId)
                     
-                    # Todo: Eindeutige Id vergeben: pylarexx + sensorId
                     payload = {'name': '%s %s' % (sensor.name, sensor.type),
                                'unique_id': uniqueId,
                                'device_class': stype,
