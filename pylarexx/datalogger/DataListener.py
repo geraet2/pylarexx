@@ -278,7 +278,7 @@ class MQTTListener(DataListener):
                         stype="humidity"
                     
                     payload = {'name': '%s %s' % (sensor.name, sensor.type),
-                               'unique_id': uniqueid,
+                               'unique_id': '%s_%s' % (uniqueid,stype),
                                'device_class': stype,
                                'state_topic': topicstate,
                                'unit_of_measurement': unit_of_measurement,
