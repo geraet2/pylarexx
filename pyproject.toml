@@ -7,7 +7,7 @@ packages = ["pylarexx", "pylarexx.datalogger"]
 
 [project]
 name = "pylarexx"
-version = "0.5.0"
+version = "0.5.1"
 authors = [
   { name="Florian Gleixner", email="flo@redflo.de"},
   { name="inonoob"},

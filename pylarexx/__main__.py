@@ -22,9 +22,9 @@ import logging
 import importlib.metadata
 
 __all__ = []
-__version__ = 0.5
+__version__ = '0.5.1'
 __date__ = '2017-11-22'
-__updated__ = '2026-08-09'
+__updated__ = '2026-08-10'
 
 DEBUG = 0
 TESTRUN = 0

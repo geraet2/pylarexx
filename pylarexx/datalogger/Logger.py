@@ -294,7 +294,8 @@ class TLX00(object):
                 if self.detectUnknownSensors and sensorid not in self.sensors:
                     
                     newSensor = self.detectSensor(sensorid)
-                    self.addSensor(newSensor)
+                    if newSensor != False:
+                        self.addSensor(newSensor)
                 datapoints.append({'sensorid': sensorid, 'rawvalue': rawvalue, 'timestamp': timestamp+self.TIME_OFFSET, 'signal':signal})
                 # logging.info("Found Datapoint from sensor %d with value %d" % (sensorid,rawvalue))
                 pos+=data[pos]-1

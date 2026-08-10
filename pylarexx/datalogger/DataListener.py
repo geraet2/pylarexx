@@ -276,8 +276,12 @@ class MQTTListener(DataListener):
                     stype=sensor.type.lower()
                     if stype == "relative humidity":
                         stype="humidity"
-
+                        
+                    uniqueId='pylarexx-%s-%s' % (stype,sensor.displayid)
+                    
+                    # Todo: Eindeutige Id vergeben: pylarexx + sensorId
                     payload = {'name': '%s %s' % (sensor.name, sensor.type),
+                               'unique_id': uniqueId,
                                'device_class': stype,
                                'state_topic': topicstate,
                                'unit_of_measurement': unit_of_measurement,
