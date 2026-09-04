@@ -4,4 +4,6 @@ device.xml
 .settings
 .pydevproject
 .project
-
+.venv
+build
+*.egg-info

@@ -10,12 +10,12 @@ import usb.core
 import time
 import math
 import array
-import datalogger.Sensor
-import datalogger.DataListener
-from datalogger.DataListener import DataListener
+from . import Sensor
+from . import DataListener
+# from .DataListener import DataListener
 import logging
 import yaml
-from datalogger.Sensor import ArexxSensorDetector
+from .Sensor import ArexxSensorDetector
 from datetime import datetime
 from pprint import pformat
 
@@ -60,20 +60,20 @@ class TLX00(object):
                     logging.info("Adding Sensor from config file: %d %s %s"%(sensorid,sensortype,name))
                     # Todo: Sensortype weg machen
                     if sensortype in ('TL-3TSN','TSN-50E','TSN-EXT44','TSN-33MN'):
-                        self.sensors[sensorid]=datalogger.Sensor.ArexxTemperatureSensor(sensorid,sensortype,name)
+                        self.sensors[sensorid]=Sensor.ArexxTemperatureSensor(sensorid,sensortype,name)
                     elif sensortype in ('TSN-TH70E', 'TSN-TH77ext'):
-                        self.sensors[sensorid]=datalogger.Sensor.ArexxTemperatureSensor(sensorid,sensortype,name)
-                        self.sensors[sensorid+1]=datalogger.Sensor.ArexxHumiditySensor(sensorid+1,sensortype,name)
-                    elif sensortype in ('TSN-CO2'):
-                        self.sensors[sensorid]=datalogger.Sensor.ArexxTemperatureSensor(sensorid,sensortype,name)
-                        self.sensors[sensorid+1]=datalogger.Sensor.ArexxCO2Sensor(sensorid+1,sensortype,name)
+                        self.sensors[sensorid]=Sensor.ArexxTemperatureSensor(sensorid,sensortype,name)
+                        self.sensors[sensorid+1]=Sensor.ArexxHumiditySensor(sensorid+1,sensortype,name)
+                    elif sensortype in ('TSN-CO2',):
+                        self.sensors[sensorid]=Sensor.ArexxTemperatureSensor(sensorid,sensortype,name)
+                        self.sensors[sensorid+1]=Sensor.ArexxCO2Sensor(sensorid+1,sensortype,name)
                     else:
                         # Bug? TSN-TH70E #20444 is not added by this code
                         detected_sensor = self.detectSensor(sensorid, name)
                         if detected_sensor != False:
                             self.addSensor(detected_sensor)
                         else:
-                            self.sensors[sensorid]= datalogger.Sensor.Sensor(sensorid)
+                            self.sensors[sensorid]= Sensor.Sensor(sensorid)
                             self.sensors[sensorid].setName(name)
             except Exception as e:
                 logging.error('Error in config section sensors: %s',e)
@@ -99,7 +99,7 @@ class TLX00(object):
                 try:
                     loggerType = logger.get('type')
                     params= logger.get('params',{})
-                    listenerClass = getattr(datalogger.DataListener,loggerType)
+                    listenerClass = getattr(DataListener,loggerType)
                     self.registerDataListener(listenerClass(params))
                 except Exception as e:
                     logging.error('Error in config section output: %s',e)
@@ -239,7 +239,7 @@ class TLX00(object):
 
 
     def registerDataListener(self, dataListener):
-        if isinstance(dataListener,DataListener):
+        if isinstance(dataListener,DataListener.DataListener):
             logging.debug("Registering DataListener %s",type(dataListener).__name__)
             self.listeners.append(dataListener)
 
@@ -292,8 +292,10 @@ class TLX00(object):
                 if data[pos] == 12:
                     signal = int.from_bytes([data[pos+11]],byteorder = 'little', signed=False)
                 if self.detectUnknownSensors and sensorid not in self.sensors:
-                    self.addSensor(sensorid)
-
+                    
+                    newSensor = self.detectSensor(sensorid)
+                    if newSensor != False:
+                        self.addSensor(newSensor)
                 datapoints.append({'sensorid': sensorid, 'rawvalue': rawvalue, 'timestamp': timestamp+self.TIME_OFFSET, 'signal':signal})
                 # logging.info("Found Datapoint from sensor %d with value %d" % (sensorid,rawvalue))
                 pos+=data[pos]-1
@@ -335,12 +337,16 @@ class TLX00(object):
                         logging.debug("write and read data from device")
                         self.clearRequestBuffer()
                         self.requestBuffer[0]=3
-
-                        dev.write(dev.outAddress, self.requestBuffer,1000) # send request to read the sensors
-                        time.sleep(0.01)
-                        rawdata=dev.read(dev.inAddress,64,1000) # request the result from logger
-                        if rawdata[0]==0 and rawdata[1]==0:
-                            # no new data
+                        try:
+                            dev.write(dev.outAddress, self.requestBuffer,1000) # send request to read the sensors
+                            time.sleep(0.01)
+                         
+                            rawdata=dev.read(dev.inAddress,64,1000) # request the result from logger
+                            if rawdata[0]==0 and rawdata[1]==0:
+                                # no new data
+                                break
+                        except usb.core.USBTimeoutError as e:
+                            logging.debug("USB Timeout writing/reading data")
                             break
                         dev.lastTimeDataRead = int(time.time()) # store new time of new retrieved data
                         datapoints = self.parseData(rawdata) # method to get process buffer data into usable data
