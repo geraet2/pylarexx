@@ -1,3 +1,4 @@
 # udev rules to match temperature logger and grant daemon user "pylarexx" permission to access it
-SUBSYSTEM=="usb", ATTRS{idVendor}=="0451", ATTRS{idProduct}=="3211", GROUP="pylarexx", MODE="0664" 
+# SYMLINK and TAG make systemd aware of this device to start daemon on demand (and stop when unplugged)
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0451", ATTRS{idProduct}=="3211", GROUP="pylarexx", MODE="0664", SYMLINK+="arexx", TAG+="systemd"
 

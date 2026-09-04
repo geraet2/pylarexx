@@ -1,5 +1,7 @@
 [Unit]
 Description=Python Logger Arexx Daemon
+After=dev-arexx.device
+BindsTo=dev-arexx.device
 
 [Service]
 Type=simple
